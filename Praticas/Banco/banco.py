@@ -2,7 +2,7 @@ import contas
 import pessoas
 
 
-'''class Banco:
+class Banco:
     def __init__(
         self,
         agencias: list[int] | None = None,
@@ -68,4 +68,4 @@ if __name__ == '__main__':
     if banco.autenticar(c1, cc1):
         cc1.depositar(10)
         c1.conta.depositar(100)
-        print(c1.conta)'''
+        print(c1.conta)
