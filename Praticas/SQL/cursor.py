@@ -1,9 +1,13 @@
 # import os
+# from typing import cast
 
 # import dotenv
 # import pymysql
+# import pymysql.cursors
 
 # TABLE_NAME = 'customers'
+# CURRENT_CURSOR = pymysql.cursors.SSDictCursor
+# CURRENT_CURSOR = pymysql.cursors.DictCursor
 
 # dotenv.load_dotenv()
 
@@ -12,7 +16,8 @@
 #     user=os.environ['MYSQL_USER'],
 #     password=os.environ['MYSQL_PASSWORD'],
 #     database=os.environ['MYSQL_DATABASE'],
-#     charset='utf8mb4'
+#     charset='utf8mb4',
+#     cursorclass=CURRENT_CURSOR,
 # )
 
 # with connection:
@@ -126,7 +131,6 @@
 #             f'DELETE FROM {TABLE_NAME} '
 #             'WHERE id = %s'
 #         )
-#         print(cursor.execute(sql, (1,)))  # type: ignore
 #         cursor.execute(sql, (1,))  # type: ignore
 #         connection.commit()
 
@@ -137,29 +141,44 @@
 
 #     # Editando com UPDATE, WHERE e placeholders no PyMySQL
 #     with connection.cursor() as cursor:
+#         cursor = cast(CURRENT_CURSOR, cursor)
+
 #         sql = (
 #             f'UPDATE {TABLE_NAME} '
 #             'SET nome=%s, idade=%s '
 #             'WHERE id=%s'
 #         )
-#         cursor.execute(sql, ('Eleonor', 102, 4))  # type: ignore
-#         cursor.execute(f'SELECT * FROM {TABLE_NAME} ')  # type: ignore
+#         cursor.execute(sql, ('Eleonor', 102, 4))
+#         cursor.execute(f'SELECT * FROM {TABLE_NAME} ')
 
-#         for row in cursor.fetchall():  # type: ignore
+#         print('For 1: ')
+#         for row in cursor.fetchall_unbuffered():
 #             print(row)
+#         cursor.execute(
+#             f'SELECT id from {TABLE_NAME} ORDER BY id DESC LIMIT 1'
+#         )
+#         lastIdFromSelect = cursor.fetchone()
+
+#         resultFromSelect = cursor.execute(f'SELECT * FROM {TABLE_NAME} ')
+
+#             if row['id'] >= 5:
+#                 break
+#         data6 = cursor.fetchall()
+
+#         print()
+#         print('For 2: ')
+#         # cursor.scroll(-1)
+#         for row in cursor.fetchall_unbuffered():
+#         for row in data6:
+#             print(row)
+
+#         print('resultFromSelect', resultFromSelect)
+#         print('len(data6)', len(data6))
+#         print('rowcount', cursor.rowcount)
+#         print('lastrowid', cursor.lastrowid)
+#         print('lastrowid na mão', lastIdFromSelect)
+
+#         cursor.scroll(0, 'absolute')
+#         print('rownumber', cursor.rownumber)
+
 #     connection.commit()
-
-        # print('For 1: ')
-        #         for row in cursor.fetchall_unbuffered():
-        #             print(row)
-
-        #             if row['id'] >= 5:
-        #                 break
-
-        #         for row in cursor.fetchall():  # type: ignore
-        #         print()
-        #         print('For 2: ')
-        #         # cursor.scroll(-1)
-        #         for row in cursor.fetchall_unbuffered():
-        #             print(row)
-        #     connection.commit()
