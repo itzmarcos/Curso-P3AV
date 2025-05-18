@@ -181,4 +181,4 @@
 #         cursor.scroll(0, 'absolute')
 #         print('rownumber', cursor.rownumber)
 
-#     connection.commit()
+#     connection.commit ()
